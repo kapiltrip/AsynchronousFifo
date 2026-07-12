@@ -1,0 +1,17 @@
+# Vivado-generated folders and logs. Keep the .xpr and .wcfg files.
+.Xil/
+*.jou
+*.log
+*.pb
+*.str
+*.wdb
+vivado/*.cache/
+vivado/*.gen/
+vivado/*.hw/
+vivado/*.ip_user_files/
+vivado/*.runs/
+vivado/*.sim/
+vivado/*.srcs/
+
+# Temporary artifact builders and renders.
+.artifact-work/

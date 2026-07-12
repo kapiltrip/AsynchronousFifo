@@ -1,0 +1,10 @@
+*.pdf binary
+*.docx binary
+*.xlsx binary
+
+*.v text eol=lf
+*.md text eol=lf
+*.xpr text eol=lf
+*.wcfg text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf

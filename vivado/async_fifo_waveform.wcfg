@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="async_fifo_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="async_fifo_tb" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="2,737,995 ps"></ZoomStartTime>
+      <ZoomEndTime time="2,738,001 ps"></ZoomEndTime>
+      <Cursor1Time time="2,738,000 ps"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="243"></NameColumnWidth>
+      <ValueColumnWidth column_width="72"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="16" />
+   <wvobject fp_name="/async_fifo_tb/wr_clk" type="logic">
+      <obj_property name="ElementShortName">wr_clk</obj_property>
+      <obj_property name="ObjectShortName">wr_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/wr_reset" type="logic">
+      <obj_property name="ElementShortName">wr_reset</obj_property>
+      <obj_property name="ObjectShortName">wr_reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/wr_en" type="logic">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/data_in" type="array">
+      <obj_property name="ElementShortName">data_in[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/full" type="logic">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/dut/wr_bin" type="array">
+      <obj_property name="ElementShortName">wr_bin[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_bin[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/dut/wr_gray" type="array">
+      <obj_property name="ElementShortName">wr_gray[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_gray[3:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/dut/rd_gray_sync2" type="array">
+      <obj_property name="ElementShortName">rd_gray_sync2[3:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_gray_sync2[3:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/rd_clk" type="logic">
+      <obj_property name="ElementShortName">rd_clk</obj_property>
+      <obj_property name="ObjectShortName">rd_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/rd_reset" type="logic">
+      <obj_property name="ElementShortName">rd_reset</obj_property>
+      <obj_property name="ObjectShortName">rd_reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/rd_en" type="logic">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/data_out" type="array">
+      <obj_property name="ElementShortName">data_out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out[7:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/empty" type="logic">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/dut/rd_bin" type="array">
+      <obj_property name="ElementShortName">rd_bin[3:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_bin[3:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/dut/rd_gray" type="array">
+      <obj_property name="ElementShortName">rd_gray[3:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_gray[3:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/async_fifo_tb/dut/wr_gray_sync2" type="array">
+      <obj_property name="ElementShortName">wr_gray_sync2[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wr_gray_sync2[3:0]</obj_property>
+      <obj_property name="Radix">HEXRADIX</obj_property>
+   </wvobject>
+</wave_config>
