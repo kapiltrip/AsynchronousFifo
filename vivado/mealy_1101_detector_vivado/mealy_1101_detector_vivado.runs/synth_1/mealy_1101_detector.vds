@@ -1,0 +1,206 @@
+#-----------------------------------------------------------
+# Vivado v2024.1 (64-bit)
+# SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
+# IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+# SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+# Start of session at: Tue Jul 21 09:52:36 2026
+# Process ID: 16436
+# Current directory: C:/Users/kapil/OneDrive/Desktop/asynchronousFifo/vivado/mealy_1101_detector_vivado/mealy_1101_detector_vivado.runs/synth_1
+# Command line: vivado.exe -log mealy_1101_detector.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source mealy_1101_detector.tcl
+# Log file: C:/Users/kapil/OneDrive/Desktop/asynchronousFifo/vivado/mealy_1101_detector_vivado/mealy_1101_detector_vivado.runs/synth_1/mealy_1101_detector.vds
+# Journal file: C:/Users/kapil/OneDrive/Desktop/asynchronousFifo/vivado/mealy_1101_detector_vivado/mealy_1101_detector_vivado.runs/synth_1\vivado.jou
+# Running On        :LAPTOP-MQE0EFU0
+# Platform          :Windows Server 2016 or Windows 10
+# Operating System  :26200
+# Processor Detail  :Intel(R) Core(TM) i5-1035G1 CPU @ 1.00GHz
+# CPU Frequency     :1190 MHz
+# CPU Physical cores:4
+# CPU Logical cores :8
+# Host memory       :8375 MB
+# Swap memory       :8053 MB
+# Total Virtual     :16428 MB
+# Available Virtual :2592 MB
+#-----------------------------------------------------------
+source mealy_1101_detector.tcl -notrace
+create_project: Time (s): cpu = 00:00:26 ; elapsed = 00:00:31 . Memory (MB): peak = 516.758 ; gain = 200.051
+Command: synth_design -top mealy_1101_detector -part xc7a35tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 8028
+---------------------------------------------------------------------------------
+Starting Synthesize : Time (s): cpu = 00:00:18 ; elapsed = 00:00:23 . Memory (MB): peak = 971.031 ; gain = 451.336
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'mealy_1101_detector' [C:/Users/kapil/OneDrive/Desktop/asynchronousFifo/mealy_1101_detector.v:3]
+INFO: [Synth 8-226] default block is never used [C:/Users/kapil/OneDrive/Desktop/asynchronousFifo/mealy_1101_detector.v:32]
+INFO: [Synth 8-6155] done synthesizing module 'mealy_1101_detector' (0#1) [C:/Users/kapil/OneDrive/Desktop/asynchronousFifo/mealy_1101_detector.v:3]
+---------------------------------------------------------------------------------
+Finished Synthesize : Time (s): cpu = 00:00:23 ; elapsed = 00:00:30 . Memory (MB): peak = 1080.832 ; gain = 561.137
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:25 ; elapsed = 00:00:33 . Memory (MB): peak = 1080.832 ; gain = 561.137
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35tcpg236-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:25 ; elapsed = 00:00:33 . Memory (MB): peak = 1080.832 ; gain = 561.137
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Synth 8-802] inferred FSM for state register 'current_state_reg' in module 'mealy_1101_detector'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                      S0 |                               00 |                               00
+                      S1 |                               01 |                               01
+                      S2 |                               10 |                               10
+                      S3 |                               11 |                               11
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'current_state_reg' using encoding 'sequential' in module 'mealy_1101_detector'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:26 ; elapsed = 00:00:34 . Memory (MB): peak = 1080.832 ; gain = 561.137
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Muxes : 
+	   4 Input    2 Bit        Muxes := 1     
+	   2 Input    2 Bit        Muxes := 4     
+	   4 Input    1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+INFO: [Device 21-9227] Part: xc7a35tcpg236-1 does not have CEAM library.
+Part Resources:
+DSPs: 90 (col length:60)
+BRAMs: 100 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:42 ; elapsed = 00:01:52 . Memory (MB): peak = 1267.844 ; gain = 748.148
+---------------------------------------------------------------------------------
+No constraint files found.
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:42 ; elapsed = 00:01:52 . Memory (MB): peak = 1267.844 ; gain = 748.148
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:42 ; elapsed = 00:01:52 . Memory (MB): peak = 1267.844 ; gain = 748.148
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:55 ; elapsed = 00:02:06 . Memory (MB): peak = 1267.844 ; gain = 748.148
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:55 ; elapsed = 00:02:06 . Memory (MB): peak = 1267.844 ; gain = 748.148
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:55 ; elapsed = 00:02:06 . Memory (MB): peak = 1267.844 ; gain = 748.148
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:55 ; elapsed = 00:02:06 . Memory (MB): peak = 1267.844 ; gain = 748.148
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:55 ; elapsed = 00:02:06 . Memory (MB): peak = 1267.844 ; gain = 748.148
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:55 ; elapsed = 00:02:06 . Memory (MB): peak = 1267.844 ; gain = 748.148
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-----+------+
+|      |Cell |Count |
++------+-----+------+
+|1     |BUFG |     1|
+|2     |LUT3 |     3|
+|3     |FDCE |     2|
+|4     |IBUF |     3|
+|5     |OBUF |     1|
++------+-----+------+
+
+Report Instance Areas: 
++------+---------+-------+------+
+|      |Instance |Module |Cells |
++------+---------+-------+------+
+|1     |top      |       |    10|
++------+---------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:55 ; elapsed = 00:02:06 . Memory (MB): peak = 1267.844 ; gain = 748.148
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 1 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:55 ; elapsed = 00:02:06 . Memory (MB): peak = 1267.844 ; gain = 748.148
+Synthesis Optimization Complete : Time (s): cpu = 00:00:55 ; elapsed = 00:02:06 . Memory (MB): peak = 1267.844 ; gain = 748.148
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1277.844 ; gain = 0.000
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1373.855 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete | Checksum: 43a688cc
+INFO: [Common 17-83] Releasing license: Synthesis
+16 Infos, 1 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:59 ; elapsed = 00:02:11 . Memory (MB): peak = 1373.855 ; gain = 857.098
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1373.855 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/kapil/OneDrive/Desktop/asynchronousFifo/vivado/mealy_1101_detector_vivado/mealy_1101_detector_vivado.runs/synth_1/mealy_1101_detector.dcp' has been generated.
+INFO: [Vivado 12-24828] Executing command : report_utilization -file mealy_1101_detector_utilization_synth.rpt -pb mealy_1101_detector_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Tue Jul 21 09:55:31 2026...

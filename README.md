@@ -1,79 +1,188 @@
-# Simple Asynchronous FIFO
+# Asynchronous FIFO — RTL, Learning Notes, Q&A, and Verification
 
-This folder intentionally keeps only the files needed to understand, test, and reopen the design.
+This repository is a practical learning project for a parameterized asynchronous FIFO written in plain Verilog. It connects a producer in the `wr_clk` domain to a consumer in the independent `rd_clk` domain while preserving data order and safely transferring FIFO-pointer information between the two domains.
 
-## Main files
+## Repository page
 
-- `async_fifo.v` - the FIFO design, written in plain Verilog.
-- `async_fifo_tb.v` - one beginner-readable testbench containing only 5 basic test cases.
-- `Asynchronous_FIFO_Test_Cases.xlsx` - test cases, expected results, observed Vivado results, and timing notes.
-- `Asynchronous_FIFO_Guide.docx` - simple explanation of the design, timing, causes, waveform phases, and Vivado verification.
-- `Asynchronous_FIFO_Verification_and_Signal_Guide.pdf` - polished revision guide covering the five completed tests, every current FIFO signal, and the next verification targets.
-- `vivado/async_fifo_vivado.xpr` - the Vivado 2024.1 project.
-- `vivado/async_fifo_waveform.wcfg` - the saved clean waveform view.
+| Section | Open | What it contains |
+|---|---|---|
+| RTL design | [`async_fifo.v`](./async_fifo.v) | FIFO memory, binary/Gray pointers, synchronizers, and registered `full`/`empty` flags |
+| Testbench | [`async_fifo_tb.v`](./async_fifo_tb.v) | Five self-checking baseline tests with unrelated write/read clocks |
+| Deep Q&A | [`Asynchronous_FIFO_Q_and_A.md`](./Asynchronous_FIFO_Q_and_A.md) | Detailed answers to the exact questions asked while learning this design |
+| Handwritten notes | [`handwritten/README.md`](./handwritten/README.md) | Index and placement guide for future photographed or scanned notes |
+| Excel verification plan | [`Asynchronous_FIFO_Test_Cases.xlsx`](./Asynchronous_FIFO_Test_Cases.xlsx) | Executed test cases, expected/observed results, and timing explanations |
+| Word guide | [`Asynchronous_FIFO_Guide.docx`](./Asynchronous_FIFO_Guide.docx) | Editable design and waveform explanation |
+| PDF revision guide | [`Asynchronous_FIFO_Verification_and_Signal_Guide.pdf`](./Asynchronous_FIFO_Verification_and_Signal_Guide.pdf) | Printable verification and signal reference |
+| Vivado project | [`vivado/async_fifo_vivado.xpr`](./vivado/async_fifo_vivado.xpr) | Reopenable Vivado project |
+| Saved waveform | [`vivado/async_fifo_waveform.wcfg`](./vivado/async_fifo_waveform.wcfg) | Prepared XSim waveform configuration |
 
-## How to verify
+## Recommended learning order
 
-1. Open `vivado/async_fifo_vivado.xpr` in Vivado.
-2. Click **Run Simulation > Run Behavioral Simulation**.
-3. Run the simulation to completion.
-4. The Tcl/XSim output must show `ASYNC_FIFO_TESTS: PASS` and no `FAIL` line.
-5. Use the saved waveform view to inspect clocks, resets, enables, data, `full`, `empty`, and the binary/Gray pointers.
+1. Read the [design interface and architecture](#design-interface-and-architecture) below.
+2. Open [`async_fifo.v`](./async_fifo.v) and follow its comments from declarations to full/empty detection.
+3. Read the [deep Q&A page](./Asynchronous_FIFO_Q_and_A.md), which explains the current/next-state model, clock domains, pointer conditions, wires, flip-flops, and synchronizers.
+4. Read [`async_fifo_tb.v`](./async_fifo_tb.v) beside the Excel verification plan.
+5. Run the testbench and inspect the saved Vivado waveform.
 
-The default FIFO is 8 entries x 8 bits. The write clock period is 10 ns. The read clock period is 14 ns with a 2 ns starting offset, so the two clock domains never depend on a fixed phase relationship.
+## Design interface and architecture
 
-## How the HD waveform images were created
+The default configuration is eight entries of eight bits each:
 
-The waveform pictures in `Asynchronous_FIFO_Guide.docx` were made from the **actual Vivado XSim simulation data**. They were not guessed or manually drawn.
+| Parameter | Default | Meaning |
+|---|---:|---|
+| `DW` | 8 | Width of each stored data word |
+| `AW` | 3 | Number of RAM address bits |
+| `DEPTH` | `2^AW = 8` | Number of FIFO storage locations |
 
-### 1. Export the real waveform data from Vivado
+The binary and Gray pointers are `[AW:0]`, so each pointer has one more bit than the memory address. The lower `AW` bits select a memory location; the extra bit records pointer wraparound for full/empty detection.
 
-After opening the behavioral simulation, these commands were entered in the Vivado Tcl Console:
+### Ports
 
-```tcl
-open_vcd [file normalize [file join [get_property DIRECTORY [current_project]] .. async_fifo.vcd]]
-log_vcd [get_objects -r /async_fifo_tb/*]
-restart
-run all
-close_vcd
+| Port | Direction | Clock domain | Purpose |
+|---|---|---|---|
+| `wr_clk` | Input | Write | Captures write-side state |
+| `wr_rst` | Input | Write | Asynchronously resets write pointer and `full` |
+| `wr_en` | Input | Write | Requests a write |
+| `din[DW-1:0]` | Input | Write | Data presented for writing |
+| `full` | Output | Write | Blocks writes when all locations are occupied |
+| `rd_clk` | Input | Read | Captures read-side state |
+| `rd_rst` | Input | Read | Asynchronously resets read pointer, `dout`, and `empty` |
+| `rd_en` | Input | Read | Requests a read |
+| `dout[DW-1:0]` | Output | Read | Most recently accepted read value |
+| `empty` | Output | Read | Blocks reads when no valid word is available |
+
+### Two practical clock domains
+
+```text
+Producer / write domain                         Consumer / read domain
+
+din, wr_en, wr_clk                              rd_en, rd_clk, dout
+        │                                                ▲
+        ▼                                                │
+  write pointer ───────► FIFO memory ─────────────► read pointer
+        │                                                │
+        └─ Gray pointer ── 2-FF synchronizer ───────────►│
+        │◄────────────── 2-FF synchronizer ── Gray pointer
+        │                                                │
+      full                                             empty
 ```
 
-This reruns the five tests and saves every signal change with its exact simulation time in `async_fifo.vcd`. The VCD time resolution was 1 ps, while the report explains the important events in ns.
+The testbench deliberately uses a 100 MHz write clock and an approximately 71.43 MHz read clock. Their edges have no fixed alignment, so pointer information cannot be consumed directly in the opposite domain.
 
-### 2. Select the useful test intervals
+### Current state and next state
 
-The complete run is 0 to 1590 ns. Four views were prepared:
+The design separates stored state from combinationally predicted state:
 
-- Complete five-test overview: 0 to 1590 ns.
-- One write and one read: 58 to 156 ns.
-- Full FIFO and blocked extra write: 366 to 786 ns.
-- Two pointer-wraparound rounds: 786 to 1590 ns.
+```text
+Current flip-flop value → combinational calculation → value captured next edge
 
-### 3. Draw clean high-resolution pictures
+wr_bin                 → wr_bin_next              → wr_bin
+wr_bin_next            → wr_gray_next             → wr_gray
+wr_gray_next           → full_next                → full
 
-A small Python script read the VCD timestamps and signal values. Pillow was used to draw the clocks, enables, data, pointers, `full`, and `empty` as 3200-pixel-wide PNG images at 300 DPI. Important events were labelled using the times measured from the VCD file.
+rd_bin                 → rd_bin_next              → rd_bin
+rd_bin_next            → rd_gray_next             → rd_gray
+rd_gray_next           → empty_next               → empty
+```
 
-This produces cleaner report figures than normal screen captures while still using the real Vivado values. The pictures are only a visual explanation; the self-checking Verilog testbench is what decides `PASS` or `FAIL`.
+The clock determines **when** state changes. Combinational logic determines **what** value the flip-flops capture.
 
-### 4. Add them to the Word report
+### Accepted write and read conditions
 
-The PNG files were embedded directly in the Word document. Each picture was followed by four simple explanations:
+```verilog
+wr_en && !full   // write request plus available space
+rd_en && !empty  // read request plus available data
+```
 
-- **What** happened.
-- **When** it happened.
-- **Cause** of the signal change.
-- **Why** the timing is correct for an asynchronous FIFO.
+The pointer moves only when the matching memory operation is accepted. This keeps pointer state aligned with the number of data words actually added or removed.
 
-The temporary VCD, PNG files, and image-generation script were removed after the pictures were embedded, keeping this project folder simple. To create them again, repeat the same VCD export and plotting process above. The editable Vivado signal view remains saved in `vivado/async_fifo_waveform.wcfg`.
+### Clock-domain crossing
 
-## Future Work
+Only Gray-coded pointers cross between the domains:
 
-Keep the current version as the simple learning baseline. Possible improvements later are:
+```text
+rd_gray → rd_gray_sync1 → rd_gray_sync2 → write-side full detection
+wr_gray → wr_gray_sync1 → wr_gray_sync2 → read-side empty detection
+```
 
-- Add `almost_full` and `almost_empty` warning flags.
-- Add a fill-level counter in each clock domain.
-- Add formal assertions for overflow, underflow, and data ordering.
-- Add FPGA clock/reset constraints and run a focused CDC report.
-- Test the FIFO on a real FPGA board with two independent clocks.
-- Infer block RAM for a deeper FIFO after the basic register-memory version is understood.
-- Add randomized stress testing only after the five basic tests are easy to explain.
+The first destination-domain flip-flop can encounter metastability. The second stage gives it additional settling time. Gray code limits a normal pointer step to one changing bit, preventing multi-bit binary transitions from appearing as incoherent pointer values.
+
+> Learning baseline: the tool-specific `ASYNC_REG` attributes are currently commented out in `async_fifo.v`. The two sequential synchronizer stages remain functionally present. Restore the attributes and add proper clock/CDC constraints before treating this as production FPGA CDC implementation.
+
+## Current verification status
+
+The self-checking testbench currently executes five baseline scenarios:
+
+| ID | Scenario | Main requirement | Status |
+|---|---|---|---|
+| T01 | Reset and empty-read protection | Reset values are correct and an empty read cannot move `rd_bin` | PASS |
+| T02 | One write and one read | `8'hA5` is returned and `empty` reasserts after the read | PASS |
+| T03 | FIFO ordering | `10, 11, 12, 13` are read in the original order | PASS |
+| T04 | Full and overflow protection | Eighth write asserts `full`; extra `8'hEE` write is blocked | PASS |
+| T05 | Pointer wraparound | Two fill/drain rounds preserve data and return both extended pointers to zero | PASS |
+
+The detailed expected results and timing reasons are in the [Excel verification plan](./Asynchronous_FIFO_Test_Cases.xlsx).
+
+### Next verification targets
+
+The baseline tests prove the main functional path, but a complete verification campaign should add:
+
+- Continuous simultaneous reads and writes with independent clocks.
+- Several fast-write/slow-read and slow-write/fast-read ratios.
+- Resetting only one domain during traffic, with an explicitly defined reset contract.
+- Randomized bursts checked by a scoreboard.
+- Parameter tests for multiple `DW` and `AW` values.
+- Assertions that pointers never advance on blocked operations.
+- Assertions that accepted reads match accepted writes in order.
+- CDC analysis, timing constraints, and restored `ASYNC_REG` attributes.
+- Synthesis checks for the intended FPGA memory implementation.
+
+## Run the self-checking simulation
+
+With Icarus Verilog:
+
+```powershell
+iverilog -g2012 -o async_fifo_tb_test async_fifo.v async_fifo_tb.v
+vvp async_fifo_tb_test
+```
+
+The final output must contain:
+
+```text
+ASYNC_FIFO_TESTS: PASS
+All 5 basic tests passed
+```
+
+With Vivado:
+
+1. Open [`vivado/async_fifo_vivado.xpr`](./vivado/async_fifo_vivado.xpr).
+2. Select **Run Simulation → Run Behavioral Simulation**.
+3. Run until the testbench calls `$finish`.
+4. Confirm the Tcl/XSim console contains `ASYNC_FIFO_TESTS: PASS` and no `FAIL` message.
+5. Open [`vivado/async_fifo_waveform.wcfg`](./vivado/async_fifo_waveform.wcfg) to inspect clocks, enables, data, flags, and pointers.
+
+## Deep Q&A from the design session
+
+The complete answers are kept on one focused page: [Asynchronous FIFO — Deep Questions and Answers](./Asynchronous_FIFO_Q_and_A.md).
+
+It covers:
+
+- What two clock domains mean practically.
+- Why Gray pointers cross through two flip-flops.
+- Why pointers contain an extra wrap bit.
+- Why `*_next` values are combinational wires.
+- The exact distinction between `wr_bin` and `wr_bin_next`.
+- Why `(wr_en && !full)` and `(rd_en && !empty)` are required.
+- Why `empty_next` is captured into `empty` at an `rd_clk` edge.
+- Why a clock cannot replace next-state combinational logic.
+- Why the FIFO needs both state flip-flops and synchronizer flip-flops.
+
+## Study artifacts
+
+- [`Asynchronous_FIFO_Guide.docx`](./Asynchronous_FIFO_Guide.docx) is the editable long-form explanation.
+- [`Asynchronous_FIFO_Verification_and_Signal_Guide.pdf`](./Asynchronous_FIFO_Verification_and_Signal_Guide.pdf) is the printable revision version.
+- [`handwritten/README.md`](./handwritten/README.md) is the index for future handwritten pages so each image can remain beside its explanation.
+
+## Design limitations and future improvements
+
+This repository intentionally remains a beginner-readable baseline. Future versions can add `almost_full`, `almost_empty`, occupancy estimates in both domains, randomized verification, formal properties, FPGA clock/reset constraints, CDC reports, block-RAM inference, and hardware testing with truly independent clocks.

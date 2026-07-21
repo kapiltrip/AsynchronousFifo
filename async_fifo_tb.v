@@ -4,15 +4,15 @@
 module async_fifo_tb;
     reg wr_clk;
     reg rd_clk;
-    reg wr_reset;
-    reg rd_reset;
+    reg wr_rst;
+    reg rd_rst;
     reg wr_en;
     reg rd_en;
-    reg [7:0] data_in;
+    reg [7:0] din;
 
     wire full;
     wire empty;
-    wire [7:0] data_out;
+    wire [7:0] dout;
 
     integer errors;
     integer i;
@@ -20,18 +20,18 @@ module async_fifo_tb;
     reg [3:0] saved_pointer;
 
     async_fifo #(
-        .DATA_WIDTH(8),
-        .ADDRESS_WIDTH(3)
+        .DW(8),
+        .AW(3)
     ) dut (
         .wr_clk(wr_clk),
-        .wr_reset(wr_reset),
+        .wr_rst(wr_rst),
         .wr_en(wr_en),
-        .data_in(data_in),
+        .din(din),
         .full(full),
         .rd_clk(rd_clk),
-        .rd_reset(rd_reset),
+        .rd_rst(rd_rst),
         .rd_en(rd_en),
-        .data_out(data_out),
+        .dout(dout),
         .empty(empty)
     );
 
@@ -52,14 +52,14 @@ module async_fifo_tb;
         begin
             wr_en = 0;
             rd_en = 0;
-            data_in = 0;
-            wr_reset = 1;
-            rd_reset = 1;
+            din = 0;
+            wr_rst = 1;
+            rd_rst = 1;
             #20;
             @(negedge wr_clk);
-            wr_reset = 0;
+            wr_rst = 0;
             @(negedge rd_clk);
-            rd_reset = 0;
+            rd_rst = 0;
         end
     endtask
 
@@ -67,7 +67,7 @@ module async_fifo_tb;
         input [7:0] value;
         begin
             @(negedge wr_clk);
-            data_in = value;
+            din = value;
             wr_en = 1;
             @(negedge wr_clk);
             wr_en = 0;
@@ -82,9 +82,9 @@ module async_fifo_tb;
             rd_en = 1;
             @(posedge rd_clk);
             #1;
-            if (data_out !== expected) begin
+            if (dout !== expected) begin
                 errors = errors + 1;
-                $display("FAIL: expected %02h, got %02h", expected, data_out);
+                $display("FAIL: expected %02h, got %02h", expected, dout);
             end
             @(negedge rd_clk);
             rd_en = 0;
@@ -93,17 +93,17 @@ module async_fifo_tb;
 
     initial begin
         errors = 0;
-        wr_reset = 1;
-        rd_reset = 1;
+        wr_rst = 1;
+        rd_rst = 1;
         wr_en = 0;
         rd_en = 0;
-        data_in = 0;
+        din = 0;
 
         // TEST 1: reset values and empty-read protection.
         $display("TEST 1: reset and empty read");
         reset_fifo;
 
-        if (empty !== 1 || full !== 0 || data_out !== 0) begin
+        if (empty !== 1 || full !== 0 || dout !== 0) begin
             errors = errors + 1;
             $display("FAIL: wrong reset values");
         end
